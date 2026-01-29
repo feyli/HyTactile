@@ -60,18 +60,35 @@ public class HyTactilePlugin extends JavaPlugin {
         };
 
         buttplugClient.setDeviceAdded(deviceEventHandler);
+        
+        // Set up error handler to detect disconnections
+        buttplugClient.setErrorReceived(error -> {
+            LOGGER.atWarning().log("Error received from Buttplug server: %s", error.getErrorMessage());
+            // Errors can indicate disconnection, trigger reconnection
+            IntifaceConnectionManager manager = IntifaceConnectionManager.getInstance();
+            if (manager != null && !manager.isConnected()) {
+                manager.reconnect();
+            }
+        });
 
+        // Initialize singleton connection manager and start connection attempts
         try {
             String uriString = "ws://127.0.0.1:%d/buttplug".formatted(PORT);
-            buttplugClient.connect(new URI(uriString));
+            IntifaceConnectionManager manager = IntifaceConnectionManager.getInstance(buttplugClient, new URI(uriString));
+            manager.connect();
         } catch (Exception e) {
-            // TODO: Attempt reconnection until successful
-            LOGGER.atSevere().withCause(e).log("Failed to connect to Buttplug server.");
+            LOGGER.atSevere().withCause(e).log("Failed to initialize connection manager: %s", e.getMessage());
         }
     }
 
     @Override
     protected void shutdown() {
+        // Shutdown singleton connection manager first
+        IntifaceConnectionManager manager = IntifaceConnectionManager.getInstance();
+        if (manager != null) {
+            manager.shutdown();
+        }
+        
         try {
             // Stop all devices before disconnecting
             buttplugClient.stopAllDevices();
@@ -82,7 +99,9 @@ public class HyTactilePlugin extends JavaPlugin {
             LOGGER.atInfo().log("Disconnected from Buttplug server.");
         } catch (ExecutionException | InterruptedException | IOException e) {
             LOGGER.atSevere().withCause(e).log("Failed to disconnect from Buttplug server.");
-            Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }

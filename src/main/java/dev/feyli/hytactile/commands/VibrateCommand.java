@@ -20,12 +20,24 @@ public class VibrateCommand extends AbstractCommand {
     @Nullable
     @Override
     protected CompletableFuture<Void> execute(@Nonnull CommandContext context) {
+        // Check if client is connected before attempting to control devices
+        if (!HyTactilePlugin.buttplugClient.isConnected()) {
+            context.sendMessage(Message.parse("§cNot connected to Intiface server. Please wait for connection to be established."));
+            return CompletableFuture.completedFuture(null);
+        }
+        
         List<ButtplugClientDevice> devices = HyTactilePlugin.buttplugClient.getDevices();
+        
+        if (devices.isEmpty()) {
+            context.sendMessage(Message.parse("§eNo devices found. Make sure your devices are connected and scanning is enabled."));
+            return CompletableFuture.completedFuture(null);
+        }
+        
         for (ButtplugClientDevice device : devices) {
             try {
                 device.sendScalarVibrateCmd(0.3f);
             } catch (Exception e) {
-                context.sendMessage(Message.parse("An error occurred while trying to vibrate the device: " + e.getMessage()));
+                context.sendMessage(Message.parse("§cAn error occurred while trying to vibrate the device: " + e.getMessage()));
             }
         }
         return CompletableFuture.completedFuture(null);
