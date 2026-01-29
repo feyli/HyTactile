@@ -62,7 +62,7 @@ public class HyTactilePlugin extends JavaPlugin {
         buttplugClient.setDeviceAdded(deviceEventHandler);
 
         try {
-            String uriString = "ws://localhost:%d/buttplug".formatted(PORT);
+            String uriString = "ws://127.0.0.1:%d/buttplug".formatted(PORT);
             buttplugClient.connect(new URI(uriString));
         } catch (Exception e) {
             // TODO: Attempt reconnection until successful
