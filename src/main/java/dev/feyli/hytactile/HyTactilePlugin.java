@@ -65,6 +65,7 @@ public class HyTactilePlugin extends JavaPlugin {
             String uriString = "ws://localhost:%d/buttplug".formatted(PORT);
             buttplugClient.connect(new URI(uriString));
         } catch (Exception e) {
+            // TODO: Attempt reconnection until successful
             LOGGER.atSevere().withCause(e).log("Failed to connect to Buttplug server.");
         }
     }
