@@ -1,20 +1,20 @@
 {
-  "Group": "dev.hytalemodding",
-  "Name": "ExamplePlugin",
+  "Group": "dev.feyli",
+  "Name": "HyTactile",
   "Version": "1.0.0",
-  "Description": "Description of your plugin",
+  "Description": "Connect your intimate toys to Hytale using buttplug.io",
   "Authors": [
     {
-      "Name": "Your Name",
-      "Email": "your.email@example.com",
-      "Url": "https://your-website.com"
+      "Name": "Feyli",
+      "Email": "contact@feyli.dev",
+      "Url": "https://feyli.dev"
     }
   ],
-  "Website": "https://your-plugin-website.com",
+  "Website": "https://hytactile.feyli.dev",
   "ServerVersion": "*",
   "Dependencies": {},
   "OptionalDependencies": {},
   "DisabledByDefault": false,
   "IncludesAssetPack": false,
-  "Main": "dev.hytalemodding.ExamplePlugin"
+  "Main": "dev.feyli.hytactile.HyTactilePlugin"
 }

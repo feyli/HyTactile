@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.hytalemodding</groupId>
-    <artifactId>ExamplePlugin</artifactId>
+    <groupId>dev.feyli</groupId>
+    <artifactId>HyTactile</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -35,5 +35,41 @@
             <version>2026.01.24-6e2d4fc36</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.github.blackspherefollower</groupId>
+            <artifactId>buttplug4j.connectors.jetty.websocket.client</artifactId>
+            <version>3.1.180</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
